@@ -4,14 +4,12 @@
 
   roles:
     - { role: base-tools, tags: [ base-tools ] }
+    - { role: accessibility, authorize_jenkins: false, tags: [ accessibility ] }
     - { role: geerlingguy.jenkins, tags: [ jenkins ] }
 
   post_tasks:
     - include: tasks/configure-jenkins-postinstall.yml
       tags: [ jenkins-config ]
-
-    - include: tasks/configure-iptables.yml
-      tags: [ iptables ]
 
     - include: tasks/generate-ssh-key-and-upload-to-github.yml
       become: yes

@@ -3,6 +3,7 @@
   authorized_key: user=root key="{{ item }}"
   with_file:
     - files/teamred-jenkins-id_rsa.pub
+  when: authorize_jenkins
 
 - name: Authorize SSH access for human employees
   authorized_key: user=root key="{{ item }}"
