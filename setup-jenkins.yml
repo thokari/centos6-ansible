@@ -1,0 +1,31 @@
+---
+- hosts: thirsch-local-vm
+  remote_user: root
+
+  roles:
+    - { role: base-tools, tags: [ base-tools ] }
+    - { role: geerlingguy.jenkins, tags: [ jenkins ] }
+
+  post_tasks:
+    - include: tasks/configure-jenkins-postinstall.yml
+      tags: [ jenkins-config ]
+
+    - include: tasks/configure-iptables.yml
+      tags: [ iptables ]
+
+    - include: tasks/generate-ssh-key-and-upload-to-github.yml
+      become: yes
+      become_user: jenkins
+      tags: [ github-access ]
+
+    - name: Manual configuration step
+      pause:
+        prompt: |
+          Please enter passwords for all credentials before proceeding:
+          http://{{ ansible_hostname }}:{{ jenkins_http_port }}/credentials/
+
+          Press ENTER when done, or CTRL+C to abort!
+      tags: [ jenkins-config ]
+
+    - name: Restart Jenkins
+      service: name=jenkins state=restarted

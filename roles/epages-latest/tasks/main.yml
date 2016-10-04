@@ -1,0 +1,13 @@
+---
+- name: Clean yum cache
+  command: yum clean dbcache
+
+- name: Update yum packages
+  command: yum update -y
+
+- name: Fetch ePages installation script
+  get_url: url=http://www.epages.com/repo/epages/install-epages.sh dest=/tmp mode=u+rwx
+
+- name: Run ePages installation script
+  command: /tmp/install-epages.sh --singlehost
+  when: run_install_script

@@ -1,0 +1,11 @@
+---
+- name: Install ePages repository
+  yum_repository:
+    name: ePages
+    baseurl: "{{ epages_repository_root }}/{{ epages_version }}/latest"
+
+- name: Install individual ePages packages
+  yum:
+    name: "{{ epages_rpm_repo }}{{ item }}"
+    state: present
+  with_items: "{{ epages_packages_to_install }}"

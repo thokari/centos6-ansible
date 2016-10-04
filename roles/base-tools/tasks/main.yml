@@ -1,0 +1,25 @@
+---
+- name: Install tree
+  yum: name=tree
+
+### pip ########################################################################
+- name: Install EPEL RPM repository public key
+  rpm_key:
+    key: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6
+    state: present
+
+- name: Install EPEL RPM repository for CentOS 6.8
+  yum_repository:
+    name: EPEL
+    description: EPEL CentOS 6.8 x86_64
+    baseurl: http://dl.fedoraproject.org/pub/epel/6/x86_64
+
+- name: Install pip
+  yum: name=python-pip
+################################################################################
+
+- name: Install pexpect
+  pip: name=pexpect
+
+- name: Install httpie
+  pip: name=httpie

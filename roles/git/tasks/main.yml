@@ -1,0 +1,5 @@
+---
+- name: Install git
+  yum: name=git
+
+- include: ../../tasks/generate-ssh-key-and-upload-to-github.yml

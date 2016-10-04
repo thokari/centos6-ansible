@@ -1,0 +1,41 @@
+---
+- include: remove-old-mysql.yml
+  when: mysql_remove_old_version
+  tags: [ remove ]
+
+- name: Download MySQL bundle
+  # Ansible nags because of wget, but this way it is incremental (using creates):
+  command: wget {{ mysql_bundle_location }}{{ mysql_bundle_filename }} -P /tmp
+  args:
+    creates: /tmp/{{ mysql_bundle_filename }}
+  # Non-incremental solution that Ansible wants:
+  # get_url: url={{ mysql_bundle_location }}{{ mysql_bundle_filename }} dest=/tmp
+  tags: [ download ]
+
+- name: Create directory for unarchiving
+  file: dest=/tmp/mysql-rpms state=directory
+  tags: [ download ]
+
+- name: Unpack MySQL bundle
+  command: tar -xvf /tmp/{{ mysql_bundle_filename }}
+  args:
+    chdir: /tmp/mysql-rpms
+  # Ansible nags because of tar, but unarchive doesn't work either:
+  # unarchive : src=/tmp/{{ mysql_bundle_filename }} dest=/tmp/my-sql-rpms
+  tags: [ download ]
+
+- name: Find relevant MySQL RPMs
+  find: paths=/tmp/mysql-rpms patterns={{ mysql_relevant_rpms }}
+  register: rpms_to_install
+  tags: [ install ]
+
+- name: Install MySQL from local RPMs
+  yum:
+    name: "{{ item.path }}"
+    state: present
+  with_items: "{{ rpms_to_install.files }}"
+  tags: [ install ]
+
+- name: Start MySQL service
+  service: name=mysql state=started
+  tags: [ install ]

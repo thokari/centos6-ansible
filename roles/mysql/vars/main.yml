@@ -1,0 +1,7 @@
+---
+mysql_version: 5.5.35-1.el6
+mysql_bundle_location: http://downloads.mysql.com/archives/get/file/
+mysql_bundle_filename: MySQL-{{ mysql_version }}.x86_64.rpm-bundle.tar
+mysql_relevant_rpms: "*client-{{ mysql_version }}*,*server-{{ mysql_version }}*,*shared-compat-{{ mysql_version }}*"
+
+mysql_remove_old_version: yes

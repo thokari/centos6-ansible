@@ -1,0 +1,17 @@
+---
+- name: Authorize SSH access for Jenkins
+  authorized_key: user=root key="{{ item }}"
+  with_file:
+    - files/teamred-jenkins-id_rsa.pub
+
+- name: Authorize SSH access for human employees
+  authorized_key: user=root key="{{ item }}"
+  with_file:
+    - files/thirsch-id_rsa.pub
+    - files/ubiallas-id_rsa.pub
+    - files/abrandimarti-id_rsa.pub
+
+- include: ../../../tasks/configure-iptables.yml
+
+- name: Copy test script
+  copy: src=files/test-server.sh dest=/root mode=u+rwx

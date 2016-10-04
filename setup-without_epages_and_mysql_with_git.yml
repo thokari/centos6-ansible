@@ -1,0 +1,8 @@
+---
+- hosts: vm05
+  remote_user: root
+
+  roles:
+    - { role: base-tools, tags: [ base-tools ] }
+    - { role: accessibility, tags: [ accessibility ] }
+    - { role: git, tags: [ git ] }

@@ -1,0 +1,58 @@
+# NOTE:
+# This set of tasks relies on role variables defined by the jenkins role.
+# Ansible stores these variables locally to a role, a well as globally until
+# they are overwritten.
+
+---
+- name: Copy plugin configuration files
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ jenkins_home }}/{{ item.dest }}"
+    owner: jenkins
+  with_items:
+    - { src: files/credentials.xml, dest: credentials.xml }
+
+# - name: Configure SSH credentials
+#   blockinfile:
+#     dest: "{{ jenkins_home }}/credentials.xml"
+#     owner: jenkins
+#     group: jenkins
+#     insertbefore: </java\.util\.concurrent\.CopyOnWriteArrayList>
+#     block: >
+#       <com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey plugin="ssh-credentials@1.12">
+#           <scope>GLOBAL</scope>
+#           <id>749ef1dc-320d-48ab-a541-5ab6ac6cbbbc</id>
+#           <description>Jenkins SSH key</description>
+#           <username>jenkins</username>
+#           <passphrase>ZE4VSD6vrAwu8w6IponA26XiAHT7NTRuilHCcL+KuGc=</passphrase>
+#           <privateKeySource class="com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey$UsersPrivateKeySource"/>
+#       </com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey>
+
+- name: Configure vCenter plugin (remove empty entry)
+  lineinfile:
+    dest: "{{ jenkins_home }}/config.xml"
+    regexp: "<clouds/>"
+    state: absent
+
+
+- name: Configure vCenter plugin
+  blockinfile:
+    dest: "{{ jenkins_home }}/config.xml"
+    owner: jenkins
+    group: jenkins
+    insertbefore: "<quietPeriod>5</quietPeriod>"
+    marker: "<!-- {mark} ANSIBLE MANAGED BLOCK -->"
+    block: |
+      <clouds>
+        <org.jenkinsci.plugins.vSphereCloud plugin="vsphere-cloud@2.13">
+          <name>vSphereCloud</name>
+          <vsDescription>vcenter</vsDescription>
+          <maxOnlineSlaves>0</maxOnlineSlaves>
+          <vsConnectionConfig>
+            <vsHost>https://vcenter.intern.epages.de</vsHost>
+            <credentialsId>76f66cb7-7e47-4e12-a894-0f5e4341c552</credentialsId>
+          </vsConnectionConfig>
+          <instanceCap>2147483647</instanceCap>
+          <templates class="empty-list"/>
+        </org.jenkinsci.plugins.vSphereCloud>
+      </clouds>

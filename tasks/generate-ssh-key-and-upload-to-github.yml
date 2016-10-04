@@ -1,0 +1,38 @@
+---
+- include_vars: ../github-credentials.yml
+
+- name: Fail on missing credentials
+  fail: msg='Please configure github-credentials.yml first!'
+  when: not SSH_PASSWORD or not GITHUB_USER or not GITHUB_PASSWORD
+
+- name: Create SSH folder
+  file: path=~/.ssh state=directory
+
+- name: Generate SSH key
+  command: ssh-keygen -t rsa -b 4096 -N '{{ SSH_PASSWORD }}' -f ~/.ssh/id_rsa
+  args:
+    creates: ~/.ssh/id_rsa
+
+- name: Copy public key
+  command: cat ~/.ssh/id_rsa.pub
+  register: ssh_public_key
+  changed_when: false
+
+- name: Add public key to GitHub account
+  uri:
+    url: https://api.github.com/user/keys
+    method: POST
+    user: "{{ GITHUB_USER }}"
+    password: "{{ GITHUB_PASSWORD }}"
+    body: "{\"title\":\"{{ ansible_user_id }}@{{ ansible_fqdn }}\",\"key\":\"{{ ssh_public_key.stdout }}\", \"_hack\": null}"
+    force_basic_auth: yes
+    body_format: json
+    status_code: 201, 422 # 201 - set key, 422 - key is already in use
+
+- name: Accept GitHub into know_hosts file
+  expect:
+    command: ssh -o StrictHostKeyChecking=no -T git@github.com
+    responses:
+      .*passphrase.*: "{{ SSH_PASSWORD }}"
+  register: result
+  failed_when: result.rc != 1 # ssh -T returns 1 on success

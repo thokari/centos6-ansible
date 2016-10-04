@@ -1,0 +1,24 @@
+---
+- name: Stop MySQL service
+  service:
+    name: mysql
+    state: stopped
+  ignore_errors: yes
+
+- name: Remove old / conflicting MySQL libraries
+  command: rpm -e --nodeps {{ item }}
+  with_items:
+    - mysql
+    - mysql-libs
+    - mysql-server
+    # between 5.1 and 5.5 the MySQL project apparently changed their package names...
+    - MySQL-client
+    - MySQL-shared
+    - MySQL-shared-compat
+    - MySQL-server
+  ignore_errors: yes
+
+- name: Remove MySQL data directory
+  file:
+    path: /var/lib/mysql
+    state: absent

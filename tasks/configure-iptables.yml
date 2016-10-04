@@ -1,0 +1,21 @@
+---
+- name: Drop all current rules
+  command: iptables -F
+
+- name: Allow request from different ports
+  command: iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport {{item}} -j ACCEPT
+  with_items:
+   - 22     # ssh
+   - 80     # http
+   - 443    # https
+   - 3306   # mysql
+   - 5000   # kitten app
+   - 5001   # kitten app
+   - 8088   # epagesj
+   - 8983   # solr
+   - 8985   # solr
+   - 27017  # mongodb
+   - 28017  # mongodb diagnostics
+
+- name: Save iptables rules
+  command: service iptables save

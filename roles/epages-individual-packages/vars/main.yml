@@ -1,0 +1,11 @@
+---
+epages_repository_root: ftp://ftp.epages.com/pub/epages/build/repo
+epages_version: 6.17.52
+epages_target_arch: x86_64
+
+epages_server_packages:
+  - epages-appsrv
+  - epages-ascsrv
+  - epages-j
+  - epages-reqsrv
+  - epages-webconf
