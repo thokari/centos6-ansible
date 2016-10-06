@@ -1,0 +1,22 @@
+---
+- hosts: all
+
+  gather_facts: false
+
+  tasks:
+
+    - name: Gather facts
+      setup:
+      register: ansible_facts
+
+    - name: Print facts
+      debug: msg={{ ansible_facts }}
+
+    - name: Send facts to VM tool
+      local_action:
+        module: uri
+        url: http://teamred-jenkins.vm-intern.epages.com:3000/vms
+        method: PUT
+        body: "{{ ansible_facts }}"
+        status_code: 200
+        body_format: json

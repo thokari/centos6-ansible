@@ -1,0 +1,30 @@
+---
+- name: Checkout from GitHub
+  git:
+    repo: https://github.com/thokari/vm-reservation
+    dest: /opt/vm-reservation
+    force: yes
+
+- name: Make installation scripts executable
+  file: dest={{ item }} mode=u+rwx
+  with_items:
+    - /opt/vm-reservation/vm-reservation-backend/install.sh
+    - /opt/vm-reservation/vm-reservation-ui/install.sh
+
+- name: Remove lock files
+  file: dest="{{ item }}" state=absent
+  with_items:
+    - /var/lock/subsys/vmtool
+    - /var/lock/subsys/vmtool-ui
+
+- name: Run backend installation script
+  shell: chdir=/opt/vm-reservation/vm-reservation-backend ./install.sh
+
+- name: Run UI installation script
+  shell: chdir=/opt/vm-reservation/vm-reservation-ui ./install.sh
+
+# - name: Start services
+#   service: name={{ item }} state=started
+#   with_items:
+#     - vmtool
+#     - vmtool-ui

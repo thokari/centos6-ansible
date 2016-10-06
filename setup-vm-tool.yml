@@ -1,0 +1,8 @@
+---
+- hosts: teamred-jenkins
+  remote_user: root
+
+  roles:
+    - { role: base-tools, tags: [ base-tools ] }
+    - { role: nodejs, tags: [ nodejs ] }
+    - { role: vm-tool, tags: [ vm-tool ] }

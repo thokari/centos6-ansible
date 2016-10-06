@@ -1,3 +1,13 @@
+[epagesj-vms]
+epagesj-vm05.intern.epages.de
+epagesj-vm06.intern.epages.de
+epagesj-vm07.intern.epages.de
+epagesj-vm08.intern.epages.de
+epagesj-vm09.vm-intern.epages.com
+epagesj-vm10.vm-intern.epages.com
+epagesj-vm11.vm-intern.epages.com
+epagesj-vm12.vm-intern.epages.com
+
 [vm05]
 172.19.50.194
 
@@ -6,3 +16,6 @@
 
 [thirsch-local-vm]
 172.21.50.5
+
+[teamred-jenkins]
+172.20.60.167

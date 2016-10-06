@@ -1,0 +1,6 @@
+---
+- name: Install NodeJS via yum
+  yum: name=nodejs state=present
+
+- name: Install npm via yum
+  yum: name=npm state=present
