@@ -1,0 +1,9 @@
+---
+- hosts: all
+  remote_user: root
+  gather_facts: yes
+
+- hosts: localhost
+  connection: local
+  roles:
+    - jdauphant.ssh-config

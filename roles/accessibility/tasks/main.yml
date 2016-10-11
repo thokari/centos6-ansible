@@ -8,9 +8,7 @@
 
 - name: Authorize SSH access for human employees
   authorized_key: user=root key="{{ item }}"
-  with_fileglob:
-    # mind the underscore at beginning of Jenkins' key filename
-    - files/keys/[!_]*-id_rsa.pub
+  with_file: "{{ authorized_ssh_keys }}"
 
 - include: ../../../tasks/configure-iptables.yml
 

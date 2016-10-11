@@ -1,8 +1,9 @@
 ---
-- hosts: vm05
+- hosts: epagesj-vms
   remote_user: root
 
   roles:
     - { role: base-tools, tags: [ base-tools ] }
     - { role: accessibility, tags: [ accessibility ] }
     - { role: git, tags: [ git ] }
+    - { role: geerlingguy.java, tags: [ java ] }

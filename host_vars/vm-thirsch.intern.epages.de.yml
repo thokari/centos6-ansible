@@ -1,0 +1,6 @@
+---
+### role: accessibility ########################################################
+authorize_jenkins: false
+authorized_ssh_keys:
+  - files/keys/thirsch-id_rsa.pub
+################################################################################

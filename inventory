@@ -8,14 +8,8 @@ epagesj-vm10.vm-intern.epages.com
 epagesj-vm11.vm-intern.epages.com
 epagesj-vm12.vm-intern.epages.com
 
-[vm05]
-172.19.50.194
-
-[vm08]
-172.19.50.197
-
-[thirsch-local-vm]
-172.21.50.5
+[vm-thirsch]
+vm-thirsch.intern.epages.de
 
 [teamred-jenkins]
-172.20.60.167
+teamred-jenkins.vm-intern.epages.com

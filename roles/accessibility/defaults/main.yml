@@ -1,2 +1,8 @@
 ---
 authorize_jenkins: true
+authorized_ssh_keys:
+  - files/keys/abrandimarti-id_rsa.pub
+  - files/keys/pshingala-id_rsa.pub
+  - files/keys/rteixeira-id_rsa.pub
+  - files/keys/thirsch-id_rsa.pub
+  - files/keys/ubiallas-id_rsa.pub
